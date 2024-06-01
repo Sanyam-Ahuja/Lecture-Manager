@@ -1,7 +1,7 @@
 {
   "name": "study-manager-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -14,9 +14,13 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "node-cache": "^5.1.2",
+    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
   "description": "",
+  "pkg": {
+    "assets": "./data/study-manager.db"
+  },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.4.5",

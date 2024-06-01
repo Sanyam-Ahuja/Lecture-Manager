@@ -10,10 +10,10 @@ const subjects = [{ id: 1, name: 'Math' }];
 const chapters = [{ id: 1, name: 'Chapter 1', subject_id: 1 }];
 const lectures = [{ id: 1, name: 'Lecture 1', chapter_id: 1, watched: 0, file_path: '/lecture1.mp4' }];
 
-mock.onGet('http://localhost:5000/api/subjects').reply(200, subjects);
-mock.onGet('http://localhost:5000/api/subjects/1/chapters').reply(200, chapters);
-mock.onGet('http://localhost:5000/api/chapters/1/lectures').reply(200, lectures);
-mock.onPut('http://localhost:5000/api/lectures/1/toggle-watched').reply(200, { id: 1, watched: 1 });
+mock.onGet('${apiUrl}/api/subjects').reply(200, subjects);
+mock.onGet('${apiUrl}/api/subjects/1/chapters').reply(200, chapters);
+mock.onGet('${apiUrl}/api/chapters/1/lectures').reply(200, lectures);
+mock.onPut('${apiUrl}/api/lectures/1/toggle-watched').reply(200, { id: 1, watched: 1 });
 
 test('renders subjects', async () => {
   render(<App />);

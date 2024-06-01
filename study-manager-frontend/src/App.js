@@ -13,6 +13,7 @@ function App() {
   const [chapterProgress, setChapterProgress] = useState({ watchedProgress: 0, remainingProgress: 0 });
   const [subjectProgress, setSubjectProgress] = useState({ watchedProgress: 0, remainingProgress: 0 });
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const apiUrl = 'https://app-backend-snowy.vercel.app/';
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -25,13 +26,13 @@ function App() {
   }, [isDarkMode]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/subjects')
+    axios.get(`${apiUrl}/api/subjects`)
       .then(response => setSubjects(response.data))
       .catch(error => console.error(error));
   }, []);
 
   const fetchChapterDuration = (chapterId) => {
-    return axios.get(`http://localhost:5000/api/chapters/${chapterId}/duration`)
+    return axios.get(`${apiUrl}/api/chapters/${chapterId}/duration`)
       .then(response => {
         const { watched_duration, total_duration } = response.data;
         const watchedProgress = Math.round(((watched_duration / 60) / 60) * 100) / 100;
@@ -46,7 +47,7 @@ function App() {
   };
 
   const fetchChapters = (subjectId) => {
-    axios.get(`http://localhost:5000/api/subjects/${subjectId}/chapters`)
+    axios.get(`${apiUrl}/api/subjects/${subjectId}/chapters`)
       .then(response => {
         const chaptersData = response.data;
 
@@ -70,7 +71,7 @@ function App() {
   };
 
   const fetchLectures = (chapterId) => {
-    axios.get(`http://localhost:5000/api/chapters/${chapterId}/lectures`)
+    axios.get(`${apiUrl}/api/chapters/${chapterId}/lectures`)
       .then(response => {
         setLectures(response.data);
         setSelectedChapter(chapterId);
@@ -80,7 +81,7 @@ function App() {
   };
 
   const fetchSubjectDuration = (subjectId) => {
-    axios.get(`http://localhost:5000/api/subjects/${subjectId}/duration`)
+    axios.get(`${apiUrl}/api/subjects/${subjectId}/duration`)
       .then(response => {
         const { watched_duration, total_duration } = response.data;
         const watchedProgress = Math.round(((watched_duration / 60) / 60) * 100) / 100;
@@ -91,7 +92,7 @@ function App() {
   };
 
   const toggleWatchedStatus = (lectureId) => {
-    return axios.put(`http://localhost:5000/api/lectures/${lectureId}/toggle-watched`)
+    return axios.put(`${apiUrl}/api/lectures/${lectureId}/toggle-watched`)
       .then(response => {
         setLectures(lectures.map(lecture =>
           lecture.id === lectureId ? { ...lecture, watched: response.data.watched } : lecture
@@ -166,7 +167,7 @@ function App() {
             <div className="video-player-container">
               <h2>{selectedLecture.name}</h2>
               <ReactPlayer
-                url={`http://localhost:5000${selectedLecture.file_path}`}
+                url={`${apiUrl}${selectedLecture.file_path}`}
                 controls={true}
                 width="100%"
                 height="100%"

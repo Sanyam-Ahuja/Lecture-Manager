@@ -2,16 +2,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5010;
 
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = new sqlite3.Database('./study-manager.db');
+const dbPath = path.join(__dirname, 'data', 'study-manager.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error(`Error opening database: ${err.message}`);
+  } else {
+    console.log('Database connected successfully');
+  }
+});
 
 // Initialize database schema
 db.serialize(() => {
@@ -20,10 +26,10 @@ db.serialize(() => {
   db.run("CREATE TABLE IF NOT EXISTS Lectures (id INTEGER PRIMARY KEY, chapter_id INTEGER, name TEXT, file_path TEXT, watched INTEGER, duration INTEGER, FOREIGN KEY(chapter_id) REFERENCES Chapters(id), UNIQUE(chapter_id, name))");
 });
 
-
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
+
 
 // Get all subjects
 app.get('/api/subjects', (req, res) => {
